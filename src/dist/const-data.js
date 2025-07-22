@@ -1,0 +1,20 @@
+export const dAppMetaData = {
+  appName: 'Laughstorage staking tool',
+  description: 'Staking Filecoin',
+  appUrl: 'https://staking.filecoin.io',
+  icons: ['https://staking.filecoin.io/favicon.ico'],
+}
+
+export const viewLink = {
+  tx: 'https://calibration.filfox.info/message',
+}
+
+export const constStatusConfig = {
+  draft: { color: 'negative', label: 'Draft', icon: 'drive_file_rename_outline' },
+  submit: { color: 'grey', label: 'Under review', icon: 'pending_actions' },
+  approved: { color: 'green', label: 'Approved', icon: 'check' },
+  rejected: { color: 'red', label: 'Rejected', icon: 'close' },
+  waiting_allocation: { color: 'blue', label: 'Waiting allocation', icon: 'pending_actions' },
+  reject: { color: 'warning', label: 'Rejected', icon: 'close' },
+  no_data: { color: 'negative', label: 'No proposal created', icon: 'warning' },
+}
