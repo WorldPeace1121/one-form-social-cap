@@ -17,7 +17,8 @@
             <q-stepper v-model="step" vertical color="primary" animated>
               <q-step icon="badge" :name="0" title="KYC Certification"></q-step>
               <template v-for="(group, index) in constProposalForm" :key="group.group">
-                <q-step :icon="`fa-solid fa-${index + 1}`" :name="index + 1" :title="group.group">
+                <q-step :done="step > index + 1" :icon="`fa-solid fa-${index + 1}`" :name="index + 1"
+                  :title="group.group" done-color="positive">
                   <q-form @submit="nextStep(index)">
                     <q-card flat>
                       <q-card-section class="space-y-4">

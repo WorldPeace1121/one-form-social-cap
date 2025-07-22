@@ -37,10 +37,9 @@ export const useUserStore = defineStore('user', {
     loginSuccess(token) {
       this.getUserInfo()
       this.isLogin = true
+      this.setOpenLogin(false)
       customAlert.success('Login success!')
       userAppToken.save(token)
-      this.setOpenLogin(false)
-
       // clear the url query
       if (window.history && window.history.replaceState) {
         const cleanUrl = window.location.pathname + window.location.hash
