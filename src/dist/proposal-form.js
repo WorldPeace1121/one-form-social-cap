@@ -163,9 +163,9 @@ export const constProposalForm = [
         key: 'volume_files',
         required: true,
         rules: [(val) => (emptyString(val) ? 'This field is required' : true)],
-        max: 5,
+        max: 4,
         single_size: 1024,
-        hint: 'Please upload proof documents of data volume. The allowed file formats are DOC, image, txt, and pdf. A maximum of 5 files can be uploaded, and the size of each individual file must not exceed 2MB',
+        hint: 'Please upload proof documents of data volume. The allowed file formats are DOC, image, txt, and pdf. A maximum of 4 files can be uploaded, and the size of each individual file must not exceed 2MB',
       },
       {
         label: 'What is the expected retrieval frequency for this data',

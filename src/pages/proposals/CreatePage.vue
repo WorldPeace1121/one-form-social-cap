@@ -21,17 +21,53 @@
                   :title="group.group" done-color="positive">
                   <q-form @submit="nextStep(index)">
                     <q-card flat>
-                      <q-card-section class="space-y-4">
+                      <q-card-section>
                         <div class="grid grid-cols-12 gap-4">
                           <div v-for="field in group.fields" :key="field.label"
                             :class="field.col ? `cols-${field.col}` : 'cols-12'">
                             <q-input outlined dense v-model="form[field.key]" :label="field.label" :type="field.type"
-                              v-if="field.type != 'select' && field.type != 'checkbox'" :hint="field.hint"
+                              v-if="field.type != 'select' && field.type != 'files'" :hint="field.hint"
                               :rules="field.rules">
                               <template v-slot:prepend v-if="field.required">
                                 <span class="text-red-500 text-base">*</span>
                               </template>
                             </q-input>
+                            <div v-if="field.type == 'files'" class="space-y-3">
+                              <h5 class="font-bold text-base flex items-center space-x-2">
+                                <span class="text-red-500 text-base">*</span>
+                                <span>{{ field.label }}</span>
+                              </h5>
+                              <div :class="`grid grid-${field.max} gap-4`">
+                                <div v-for="(file, index) in form[field.key]" :key="index">
+                                  <div class="flex flex-col items-center rounded-lg p-2 space-y-2" :class="{
+                                    'bg-page-color text-meta': typeof file == 'object',
+                                    'bg-green-200 text-green-500': typeof file == 'string'
+                                  }">
+                                    <q-icon name="file_open" size="2em" />
+                                    <div class="text-sm font-bold">
+                                      {{ file.name }}
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                      <q-btn label="Delete" size="sm" color="red" unelevated
+                                        @click="handleFileDelete(field, index)" />
+                                      <q-btn label="Upload" size="sm" color="primary" unelevated
+                                        v-if="typeof file == 'object'" @click="handleFileUpload(field, index)" />
+                                    </div>
+                                  </div>
+                                </div>
+                                <template v-if="form[field.key].length < field.max">
+                                  <q-btn color="primary" unelevated @click="handleFileClick(field)">
+                                    <div class="flex items-center space-x-2 flex-col">
+                                      <q-icon name="add" size="2em" />
+                                      <p class="text-sm">Add File</p>
+                                    </div>
+                                  </q-btn>
+                                  <input type="file" :ref="`fileInput-${field.key}`" class="hidden"
+                                    @change="handleFileChange(field, $event)" />
+                                </template>
+                              </div>
+                              <p class="text-xs text-gray-500">{{ field.hint }}</p>
+                            </div>
                             <q-select outlined dense v-model="form[field.key]" :label="field.label"
                               :options="field.options" v-if="field.type == 'select'" :hint="field.hint"
                               :rules="field.rules">
@@ -39,14 +75,6 @@
                                 <span class="text-red-500 text-base">*</span>
                               </template>
                             </q-select>
-                            <div v-if="field.type == 'checkbox'" class="space-y-2">
-                              <div class="flex items-center space-x-2">
-                                <h5 class="font-bold">{{ field.label }}</h5>
-                                <span class="text-red-500 text-base" v-if="field.required">*</span>
-                              </div>
-                              <q-checkbox outlined dense v-model="form[field.key]" :label="field.data"></q-checkbox>
-                              <p class="text-xs text-gray-500">{{ field.hint }}</p>
-                            </div>
                           </div>
                         </div>
                       </q-card-section>
@@ -120,6 +148,7 @@ export default defineComponent({
         is_public_dataset: false,
         data_owner_name: undefined,
         datacap_amount: undefined,
+        volume_files: []
       },
       loading: false,
       error: undefined,
@@ -153,14 +182,26 @@ export default defineComponent({
         const proposal = JSON.parse(res.data.p_content);
         proposal.forEach(item => {
           this.form[item.key] = item.value;
+          if (item.key == 'volume_files') {
+            this.form.volume_files = item.value.split(',');
+          }
         });
       }).finally(() => {
         this.pageLoading = false
       })
     },
     nextStep: function (index) {
-
       this.step = (index + 1) + 1;
+    },
+    handleFileDelete: function (field, index) {
+      this.form[field.key].splice(index, 1);
+    },
+    handleFileClick: function (field) {
+      this.$refs[`fileInput-${field.key}`][0].click();
+    },
+    handleFileChange: function (field, event) {
+      const file = event.target.files[0];
+      this.form[field.key].push(file);
     },
     handleSubmit: function (type) {
       this.error = undefined

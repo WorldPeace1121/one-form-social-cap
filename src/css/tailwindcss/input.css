@@ -147,6 +147,16 @@ div:where(.swal2-icon).swal2-question {
   @apply col-span-12;
 }
 
+
+
+.grid-4 {
+  @apply grid-cols-4;
+}
+
+.grid-3 {
+  @apply grid-cols-3;
+}
+
 .proposal-form-list .q-item {
   @apply flex-col space-y-2 lg:flex-row lg:space-y-0;
 }
