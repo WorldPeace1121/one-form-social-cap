@@ -15,10 +15,9 @@
         <div class="container -mt-20 space-y-5">
           <q-card class="main-card">
             <q-stepper v-model="step" vertical color="primary" animated>
-              <q-step icon="badge" :name="0" title="KYC Certification"></q-step>
               <template v-for="(group, index) in constProposalForm" :key="group.group">
-                <q-step :done="step > index + 1" :icon="`fa-solid fa-${index + 1}`" :name="index + 1"
-                  :title="group.group" done-color="positive">
+                <q-step :done="step > index" :icon="`fa-solid fa-${index + 1}`" :name="index" :title="group.group"
+                  done-color="positive">
                   <q-form @submit="nextStep(index)">
                     <q-card flat>
                       <q-card-section>
@@ -48,7 +47,7 @@
                                       {{ file.name }}
                                     </div>
                                     <div class="flex items-center space-x-2">
-                                      <q-btn label="Delete" size="sm" color="red" unelevated
+                                      <q-btn label="Delete" size="sm" color="red" unelevated outline
                                         @click="handleFileDelete(field, index)" />
                                       <q-btn label="Upload" size="sm" color="primary" unelevated
                                         v-if="typeof file == 'object'" @click="handleFileUpload(field, index)" />
@@ -70,7 +69,7 @@
                             </div>
                             <q-select outlined dense v-model="form[field.key]" :label="field.label"
                               :options="field.options" v-if="field.type == 'select'" :hint="field.hint"
-                              :rules="field.rules">
+                              :rules="field.rules" :multiple="field.multiple">
                               <template v-slot:prepend v-if="field.required">
                                 <span class="text-red-500 text-base">*</span>
                               </template>
@@ -123,7 +122,7 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { constProposalForm } from 'src/dist/proposal-form';
-import { proposalApi } from 'src/dist/api';
+import { mediaApi, proposalApi } from 'src/dist/api';
 import { useUserStore } from 'src/stores/user';
 import JustLogin from 'src/components/JustLogin.vue';
 import { customAlert, emptyString } from 'src/dist/tools';
@@ -156,7 +155,8 @@ export default defineComponent({
       saveProposal: {
         status: 'draft'
       },
-      step: 1
+      uploadLoading: {},
+      step: 0
     }
   },
   watch: {
@@ -185,16 +185,27 @@ export default defineComponent({
           if (item.key == 'volume_files') {
             this.form.volume_files = item.value.split(',');
           }
+          if (item.multiple) {
+            this.form[item.key] = item.value.split(',');
+          }
         });
       }).finally(() => {
         this.pageLoading = false
       })
     },
     nextStep: function (index) {
-      this.step = (index + 1) + 1;
+      this.step = index + 1
     },
     handleFileDelete: function (field, index) {
       this.form[field.key].splice(index, 1);
+    },
+    handleFileUpload: function (field, index) {
+      const file = this.form[field.key][index];
+      const formData = new FormData();
+      formData.append('file', file);
+      mediaApi.upload(formData).then((res) => {
+        this.form[field.key][index] = res.data;
+      })
     },
     handleFileClick: function (field) {
       this.$refs[`fileInput-${field.key}`][0].click();
@@ -202,17 +213,15 @@ export default defineComponent({
     handleFileChange: function (field, event) {
       const file = event.target.files[0];
       this.form[field.key].push(file);
+      this.uploadLoading[field.key] = true;
     },
     handleSubmit: function (type) {
       this.error = undefined
       this.loading = true
-      let data = [];
-      for (const key in this.form) {
-        data.push({
-          key,
-          value: this.form[key]
-        })
-      }
+      const data = Object.entries(this.form).map(([key, value]) => ({
+        key,
+        value: Array.isArray(value) ? value.join(',') : value
+      }));
       if (type !== 'draft') {
         type = 'submit'
       }
@@ -232,7 +241,7 @@ export default defineComponent({
         })
       }).catch((err) => {
         if (err.code == 61) {
-          this.dAppStore.setOpenLogin(true, () => {
+          this.userStore.setOpenLogin(true, () => {
             this.handleSubmit(type)
           })
           return;

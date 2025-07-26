@@ -14,8 +14,7 @@
               <q-icon name="fa-solid fa-at" />
               <span>Reply to</span>
               <span class="text-primary font-bold">
-                {{ emptyString(selectedComment.user.display_name) ? handleAddress(selectedComment.wallet_address) :
-                  selectedComment.user.display_name }}
+                {{ comment.user.display_name }}
               </span>
               <q-btn round flat icon="fa-solid fa-xmark" size="xs" color="negative" @click="selectedComment = null" />
             </div>
@@ -30,27 +29,25 @@
         <q-list>
           <q-item class="items-start" v-for="(comment, index) in comments" :key="comment.id">
             <q-item-section avatar>
-              <address-img class="rounded-full" height="40px" width="40px" :address="comment.wallet_address">
-              </address-img>
+              <q-avatar>
+                <img :src="comment.user.user_img" />
+              </q-avatar>
             </q-item-section>
             <q-item-section>
               <q-item-label-label class="flex items-center space-x-2">
                 <span class="text-lg font-bold">
-                  {{
-                    emptyString(comment.user.display_name) ? handleAddress(comment.wallet_address) :
-                      comment.user.display_name }}
+                  {{ comment.user.display_name }}
                 </span>
-                <q-chip size="sm" v-if="proposal.wallet.wallet === comment.wallet_address" color="primary"
-                  text-color="white" label="Creator" />
-                <q-chip size="sm" v-if="dAppStore.userAddress.toLowerCase() === comment.wallet_address.toLowerCase()"
-                  color="primary" text-color="white" label="Me" />
+                <q-chip size="sm" v-if="proposal.p_user === comment.user_id" color="primary" text-color="white"
+                  label="Creator" />
+                <q-chip size="sm" v-if="userStore.userInfo.id === comment.user_id" color="primary" text-color="white"
+                  label="Me" />
               </q-item-label-label>
               <div class="flex items-center space-x-2">
                 <span class="text-xs text-meta">{{ dateFromNow(comment.created_at) }}</span>
                 <q-btn round flat icon="fa-solid fa-reply" size="xs" color="primary" @click="selectComment(comment)" />
-                <q-btn v-if="dAppStore.userAddress.toLowerCase() === comment.wallet_address.toLowerCase()" round flat
-                  icon="fa-solid fa-trash" :loading="comment.deleting" size="xs" color="negative"
-                  @click="deleteComment(comment.id, index)" />
+                <q-btn v-if="userStore.userInfo.id === comment.user_id" round flat icon="fa-solid fa-trash"
+                  :loading="comment.deleting" size="xs" color="negative" @click="deleteComment(comment.id, index)" />
               </div>
               <template v-if="comment.parent">
                 <div class="bg-page-color rounded-lg overflow-hidden p-2 mt-2">
@@ -59,9 +56,7 @@
                       <q-icon name="fa-solid fa-at" />
                       <span>In reply to</span>
                       <span class="text-primary font-bold">
-                        {{ emptyString(comment.parent.user.display_name) ?
-                          handleAddress(comment.parent.wallet_address) :
-                          comment.parent.user.display_name }} :
+                        {{ comment.parent.user.display_name }}
                       </span>
                     </div>
                     <p class="reply-content" v-html="comment.parent.comment_content"></p>
@@ -85,7 +80,7 @@
 <script>
 import { defineComponent } from 'vue';
 import { commentApi } from 'src/dist/api';
-import { customAlert, customToast, dateFromNow, emptyString, handleAddress, confirmAlert } from 'src/dist/tools';
+import { customAlert, customToast, dateFromNow, emptyString, confirmAlert } from 'src/dist/tools';
 import { useUserStore } from 'src/stores/user';
 export default defineComponent({
   name: 'ProposalComments',
@@ -130,7 +125,6 @@ export default defineComponent({
   methods: {
     dateFromNow,
     emptyString,
-    handleAddress,
     selectComment(comment) {
       this.selectedComment = comment;
       document.getElementById('comment-input').scrollIntoView({ behavior: 'smooth' });

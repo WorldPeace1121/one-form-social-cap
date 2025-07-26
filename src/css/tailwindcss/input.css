@@ -223,7 +223,7 @@ div:where(.swal2-icon).swal2-question {
 }
 
 .allocator-menu .q-item.q-router-link--active {
-  @apply bg-blue-500 font-bold;
+  @apply bg-white text-primary font-bold;
 }
 
 .allocator-header {
@@ -240,11 +240,11 @@ div:where(.swal2-icon).swal2-question {
 
 /* q-table */
 .q-table thead {
-  @apply text-zinc-500 bg-blue-50;
+  @apply text-zinc-500 bg-indigo-50;
 }
 
 .q-table tbody tr:nth-child(even) {
-  @apply bg-blue-50;
+  @apply bg-indigo-50;
 }
 
 .q-table .q-badge {

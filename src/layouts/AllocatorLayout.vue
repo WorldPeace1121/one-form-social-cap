@@ -7,7 +7,7 @@
           {{ title }}
         </q-toolbar-title>
         <div>
-          <ConnectWallet rounded btn-type="account" />
+          <UserLogin color="primary" />
         </div>
       </q-toolbar>
     </q-header>
@@ -44,22 +44,25 @@
 <script>
 import { ref, defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
-import ConnectWallet from 'src/components/ConnectWallet.vue'
-import { useDAppStore } from 'src/stores/d-app'
+import UserLogin from 'src/components/UserLogin.vue'
+import { useUserStore } from 'src/stores/user'
+import { userAppToken } from 'src/dist/api'
+
 export default defineComponent({
   name: 'AllocatorLayout',
   components: {
-    ConnectWallet
+    UserLogin
   },
   setup() {
     const $q = useQuasar()
-    const dAppStore = useDAppStore()
-    const leftDrawerOpen = ref(false)
-    dAppStore.getUserInfo()
+    const userStore = useUserStore()
+    if (userAppToken.has()) {
+      userStore.isLogin = true
+      userStore.getUserInfo()
+    }
     return {
       $q: ref($q),
-      dAppStore,
-      leftDrawerOpen,
+      userStore: ref(userStore),
     }
   },
   data() {

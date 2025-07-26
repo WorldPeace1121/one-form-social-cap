@@ -1,7 +1,7 @@
 <template>
-  <q-btn v-if="!userStore.isLogin" label="Login" color="white" outline rounded icon="account_circle"
+  <q-btn v-if="!userStore.isLogin" label="Login" :color="color" outline rounded icon="account_circle"
     @click="userStore.setOpenLogin(true)" />
-  <q-btn-dropdown class="user-info-btn" v-else :label="userStore.userInfo.display_name" color="white" outline rounded
+  <q-btn-dropdown class="user-info-btn" v-else :label="userStore.userInfo.display_name" :color="color" outline rounded
     :icon="`img:${userStore.userInfo.user_img}`">
     <q-list>
       <q-item clickable @click="userStore.loginOut()">
@@ -37,6 +37,12 @@ export default defineComponent({
       loading: ref(false),
       userStore: ref(userStore),
     };
+  },
+  props: {
+    color: {
+      type: String,
+      default: 'white',
+    },
   },
   methods: {
     emptyString,

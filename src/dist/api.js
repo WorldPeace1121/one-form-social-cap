@@ -10,6 +10,11 @@ export const authApi = {
   xLogin: (data) => api.post('/auth/x-login', data),
 }
 
+export const mediaApi = {
+  // /api/media/upload
+  upload: (data) => api.post('/media/upload', data),
+}
+
 export const proposalApi = {
   // proposals
   create: (data) => api.post('/proposals', data),

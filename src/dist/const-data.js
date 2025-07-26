@@ -1,10 +1,3 @@
-export const dAppMetaData = {
-  appName: 'Laughstorage staking tool',
-  description: 'Staking Filecoin',
-  appUrl: 'https://staking.filecoin.io',
-  icons: ['https://staking.filecoin.io/favicon.ico'],
-}
-
 export const viewLink = {
   tx: 'https://calibration.filfox.info/message',
 }

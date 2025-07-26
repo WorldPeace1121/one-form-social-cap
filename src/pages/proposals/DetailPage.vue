@@ -6,9 +6,7 @@
           <q-btn padding="0" icon="arrow_back" flat label="Back" @click="goBack" />
           <h1 class="lg:text-3xl text-2xl font-bold text-white uppercase mt-5">{{ proposal.p_name }}</h1>
           <p class="text-white mt-4 lg:w-[60%] text-lg leading-loose">
-            Fill out the form below to create a new proposal. Once you click the "Submit for Review" button, your
-            proposal
-            will be received, reviewed, and the appropriate DataCap quota will be allocated!
+            {{ proposalContent.project_history }}
           </p>
         </div>
       </div>
@@ -19,10 +17,10 @@
               align="left" v-model="tab">
               <q-tab icon="assignment" name="proposal" label="Proposal Information"></q-tab>
               <q-tab icon="calendar_month" name="timeline" label="Proposal Timeline"></q-tab>
-              <q-tab icon="chat" name="comments" label="Proposal Comments"></q-tab>
+
             </q-tabs>
             <q-tab-panels v-model="tab">
-              <q-tab-panel name="proposal">
+              <q-tab-panel class="p-0" name="proposal">
                 <template v-for="(item, index) in constProposalForm" :key="index">
                   <q-list separator class="proposal-form-list">
                     <q-item-label header class="text-xl font-bold">
@@ -50,14 +48,12 @@
                     </template>
                   </q-list>
                 </template>
+                <proposal-comments :p_id="proposal.p_id" :proposal="proposal" />
               </q-tab-panel>
               <q-tab-panel name="timeline">
                 <q-card-section class="proposal-timeline">
                   <StatusTimeline :proposal="proposal" />
                 </q-card-section>
-              </q-tab-panel>
-              <q-tab-panel name="comments">
-                <proposal-comments :p_id="proposal.p_id" :proposal="proposal" />
               </q-tab-panel>
             </q-tab-panels>
           </q-card>
@@ -125,6 +121,7 @@ export default defineComponent({
           this.proposalContent[element.key] = element.value;
         });
         this.status = constStatusConfig[newVal.status];
+        console.log(this.proposalContent);
       },
       immediate: true
     }

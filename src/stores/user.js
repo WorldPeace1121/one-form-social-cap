@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', {
     isXCallback: false,
     loginError: '',
     userInfo: {
+      id: 0,
       display_name: '······',
       user_img: 'https://cdn.quasar.dev/img/avatar.png',
     },

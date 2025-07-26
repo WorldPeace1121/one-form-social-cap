@@ -212,6 +212,7 @@ export const constProposalForm = [
         ],
         key: 'storage_geographies',
         rules: [(val) => (emptyString(val) ? 'This field is required' : true)],
+        multiple: true,
       },
       {
         label: 'How will you be distributing your data to storage providers',
@@ -236,6 +237,7 @@ export const constProposalForm = [
         type: 'select',
         options: ['Slack', 'Filmine', 'Big Data Exchange', 'Partners', 'Others'],
         key: 'provider_discovery_method',
+        multiple: true,
         rules: [(val) => (emptyString(val) ? 'This field is required' : true)],
       },
       {
