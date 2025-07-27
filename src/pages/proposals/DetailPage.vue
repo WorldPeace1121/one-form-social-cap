@@ -8,19 +8,16 @@
           <p class="text-white mt-4 lg:w-[60%] text-lg leading-loose">
             {{ proposalContent.project_history }}
           </p>
+          <div>
+            <q-chip color="primary" :label="proposal.request_data_cap"></q-chip>
+          </div>
         </div>
       </div>
       <div class="-mt-20">
         <div class="container">
-          <q-card class="main-card">
-            <q-tabs inline-label active-bg-color="primary" active-color="white" inactive-color="primary" no-caps
-              align="left" v-model="tab">
-              <q-tab icon="assignment" name="proposal" label="Proposal Information"></q-tab>
-              <q-tab icon="calendar_month" name="timeline" label="Proposal Timeline"></q-tab>
-
-            </q-tabs>
-            <q-tab-panels v-model="tab">
-              <q-tab-panel class="p-0" name="proposal">
+          <div class="grid lg:grid-cols-12 gap-4">
+            <div class="lg:col-span-9">
+              <q-card class="main-card">
                 <template v-for="(item, index) in constProposalForm" :key="index">
                   <q-list separator class="proposal-form-list">
                     <q-item-label header class="text-xl font-bold">
@@ -49,14 +46,13 @@
                   </q-list>
                 </template>
                 <proposal-comments :p_id="proposal.p_id" :proposal="proposal" />
-              </q-tab-panel>
-              <q-tab-panel name="timeline">
-                <q-card-section class="proposal-timeline">
-                  <StatusTimeline :proposal="proposal" />
-                </q-card-section>
-              </q-tab-panel>
-            </q-tab-panels>
-          </q-card>
+              </q-card>
+            </div>
+            <div class="lg:col-span-3">
+              <StatusTimeline :proposal="proposal" />
+              <KycCard />
+            </div>
+          </div>
           <q-inner-loading color="primary" :showing="loading">
             <q-spinner-hourglass class="mx-auto" color="primary" size="3em" />
           </q-inner-loading>
@@ -73,11 +69,13 @@ import { constStatusConfig } from 'src/dist/const-data';
 import { proposalApi } from 'src/dist/api';
 import StatusTimeline from 'src/components/StatusTimeline.vue';
 import ProposalComments from 'src/components/ProposalComments.vue';
+import KycCard from 'src/components/KycCard.vue';
 export default defineComponent({
   name: 'ProposalDetailPage',
   components: {
     StatusTimeline,
-    ProposalComments
+    ProposalComments,
+    KycCard
   },
   data: function () {
     return {
@@ -93,6 +91,7 @@ export default defineComponent({
         status: 'draft',
         created_at: '',
         p_id: '',
+        request_data_cap: ''
       },
       loading: true,
       tab: "proposal"

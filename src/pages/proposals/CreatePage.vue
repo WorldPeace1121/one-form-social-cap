@@ -13,103 +13,111 @@
           </div>
         </div>
         <div class="container -mt-20 space-y-5">
-          <q-card class="main-card">
-            <q-stepper v-model="step" vertical color="primary" animated>
-              <template v-for="(group, index) in constProposalForm" :key="group.group">
-                <q-step :done="step > index" :icon="`fa-solid fa-${index + 1}`" :name="index" :title="group.group"
-                  done-color="positive">
-                  <q-form @submit="nextStep(index)">
-                    <q-card flat>
-                      <q-card-section>
-                        <div class="grid grid-cols-12 gap-4">
-                          <div v-for="field in group.fields" :key="field.label"
-                            :class="field.col ? `cols-${field.col}` : 'cols-12'">
-                            <q-input outlined dense v-model="form[field.key]" :label="field.label" :type="field.type"
-                              v-if="field.type != 'select' && field.type != 'files'" :hint="field.hint"
-                              :rules="field.rules">
-                              <template v-slot:prepend v-if="field.required">
-                                <span class="text-red-500 text-base">*</span>
-                              </template>
-                            </q-input>
-                            <div v-if="field.type == 'files'" class="space-y-3">
-                              <h5 class="font-bold text-base flex items-center space-x-2">
-                                <span class="text-red-500 text-base">*</span>
-                                <span>{{ field.label }}</span>
-                              </h5>
-                              <div :class="`grid grid-${field.max} gap-4`">
-                                <div v-for="(file, index) in form[field.key]" :key="index">
-                                  <div class="flex flex-col items-center rounded-lg p-2 space-y-2" :class="{
-                                    'bg-page-color text-meta': typeof file == 'object',
-                                    'bg-green-200 text-green-500': typeof file == 'string'
-                                  }">
-                                    <q-icon name="file_open" size="2em" />
-                                    <div class="text-sm font-bold">
-                                      {{ file.name }}
+          <div class="grid lg:grid-cols-12 gap-4">
+            <div class="lg:col-span-9">
+              <q-card class="main-card">
+                <q-stepper v-model="step" vertical color="primary" animated>
+                  <template v-for="(group, index) in constProposalForm" :key="group.group">
+                    <q-step :done="step > index" :icon="`fa-solid fa-${index + 1}`" :name="index" :title="group.group"
+                      done-color="positive">
+                      <q-form @submit="nextStep(index)">
+                        <q-card flat>
+                          <q-card-section>
+                            <div class="grid grid-cols-12 gap-4">
+                              <div v-for="field in group.fields" :key="field.label"
+                                :class="field.col ? `cols-${field.col}` : 'cols-12'">
+                                <q-input outlined dense v-model="form[field.key]" :label="field.label"
+                                  :type="field.type" v-if="field.type != 'select' && field.type != 'files'"
+                                  :hint="field.hint" :rules="field.rules">
+                                  <template v-slot:prepend v-if="field.required">
+                                    <span class="text-red-500 text-base">*</span>
+                                  </template>
+                                </q-input>
+                                <div v-if="field.type == 'files'" class="space-y-3">
+                                  <h5 class="font-bold text-base flex items-center space-x-2">
+                                    <span class="text-red-500 text-base">*</span>
+                                    <span>{{ field.label }}</span>
+                                  </h5>
+                                  <div :class="`grid grid-${field.max} gap-4`">
+                                    <div v-for="(file, index) in form[field.key]" :key="index">
+                                      <div class="flex flex-col items-center rounded-lg p-2 space-y-2" :class="{
+                                        'bg-page-color text-meta': typeof file == 'object',
+                                        'bg-green-200 text-green-500': typeof file == 'string'
+                                      }">
+                                        <q-icon name="file_open" size="2em" />
+                                        <div class="text-sm font-bold">
+                                          {{ file.name }}
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                          <q-btn label="Delete" size="sm" color="red" unelevated outline
+                                            @click="handleFileDelete(field, index)" />
+                                          <q-btn label="Upload" size="sm" color="primary" unelevated
+                                            v-if="typeof file == 'object'" @click="handleFileUpload(field, index)" />
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div class="flex items-center space-x-2">
-                                      <q-btn label="Delete" size="sm" color="red" unelevated outline
-                                        @click="handleFileDelete(field, index)" />
-                                      <q-btn label="Upload" size="sm" color="primary" unelevated
-                                        v-if="typeof file == 'object'" @click="handleFileUpload(field, index)" />
-                                    </div>
+                                    <template v-if="form[field.key].length < field.max">
+                                      <q-btn color="primary" unelevated @click="handleFileClick(field)">
+                                        <div class="flex items-center space-x-2 flex-col">
+                                          <q-icon name="add" size="2em" />
+                                          <p class="text-sm">Add File</p>
+                                        </div>
+                                      </q-btn>
+                                      <input type="file" :ref="`fileInput-${field.key}`" class="hidden"
+                                        @change="handleFileChange(field, $event)" />
+                                    </template>
                                   </div>
+                                  <p class="text-xs text-gray-500">{{ field.hint }}</p>
                                 </div>
-                                <template v-if="form[field.key].length < field.max">
-                                  <q-btn color="primary" unelevated @click="handleFileClick(field)">
-                                    <div class="flex items-center space-x-2 flex-col">
-                                      <q-icon name="add" size="2em" />
-                                      <p class="text-sm">Add File</p>
-                                    </div>
-                                  </q-btn>
-                                  <input type="file" :ref="`fileInput-${field.key}`" class="hidden"
-                                    @change="handleFileChange(field, $event)" />
-                                </template>
+                                <q-select outlined dense v-model="form[field.key]" :label="field.label"
+                                  :options="field.options" v-if="field.type == 'select'" :hint="field.hint"
+                                  :rules="field.rules" :multiple="field.multiple">
+                                  <template v-slot:prepend v-if="field.required">
+                                    <span class="text-red-500 text-base">*</span>
+                                  </template>
+                                </q-select>
                               </div>
-                              <p class="text-xs text-gray-500">{{ field.hint }}</p>
                             </div>
-                            <q-select outlined dense v-model="form[field.key]" :label="field.label"
-                              :options="field.options" v-if="field.type == 'select'" :hint="field.hint"
-                              :rules="field.rules" :multiple="field.multiple">
-                              <template v-slot:prepend v-if="field.required">
-                                <span class="text-red-500 text-base">*</span>
-                              </template>
-                            </q-select>
-                          </div>
-                        </div>
-                      </q-card-section>
+                          </q-card-section>
+                          <q-card-section>
+                            <div class="flex items-center justify-end space-x-5">
+                              <q-btn icon="save" rounded label="Save Draft" type="button" @click="handleSubmit('draft')"
+                                color="primary" outline />
+                              <q-btn icon-right="arrow_forward" rounded unelevated label="Next" type="submit"
+                                color="primary" />
+                            </div>
+                            <p v-if="!emptyString(error)" class="text-red-500 text-right text-xs mt-2">
+                              {{ error }}
+                            </p>
+                          </q-card-section>
+                        </q-card>
+                      </q-form>
+                    </q-step>
+                  </template>
+                  <q-step icon="check_circle" :name="10" title="Submit successfully">
+                    <q-card class="bg-green-500 text-white main-card">
                       <q-card-section>
-                        <div class="flex items-center justify-end space-x-5">
-                          <q-btn icon="save" rounded label="Save Draft" type="button" @click="handleSubmit('draft')"
-                            color="primary" outline />
-                          <q-btn icon-right="arrow_forward" rounded unelevated label="Next" type="submit"
-                            color="primary" />
+                        <div class="flex items-center space-x-5">
+                          <q-icon name="check_circle" size="2em" color="white" />
+                          <p class="text-lg font-bold">
+                            The current proposal has been submitted, please wait for our team to review!
+                            <q-btn label="View Detail" outline rounded text-color="white"
+                              :to="{ name: 'PledgeRecord' }" />
+                          </p>
                         </div>
-                        <p v-if="!emptyString(error)" class="text-red-500 text-right text-xs mt-2">
-                          {{ error }}
-                        </p>
                       </q-card-section>
                     </q-card>
-                  </q-form>
-                </q-step>
-              </template>
-              <q-step icon="check_circle" :name="10" title="Submit successfully">
-                <q-card class="bg-green-500 text-white main-card">
-                  <q-card-section>
-                    <div class="flex items-center space-x-5">
-                      <q-icon name="check_circle" size="2em" color="white" />
-                      <p class="text-lg font-bold">
-                        The current proposal has been submitted, please wait for our team to review!
-                        <q-btn label="View Detail" outline rounded text-color="white" :to="{ name: 'PledgeRecord' }" />
-                      </p>
-                    </div>
-                  </q-card-section>
-                </q-card>
-              </q-step>
-            </q-stepper>
-            <q-inner-loading color="primary" :showing="loading">
-              <q-spinner-hourglass class="mx-auto" color="primary" size="3em" />
-            </q-inner-loading>
-          </q-card>
+                  </q-step>
+                </q-stepper>
+                <q-inner-loading color="primary" :showing="loading">
+                  <q-spinner-hourglass class="mx-auto" color="primary" size="3em" />
+                </q-inner-loading>
+              </q-card>
+            </div>
+            <div class="lg:col-span-3">
+              <KycCard />
+            </div>
+          </div>
           <q-inner-loading color="primary" :showing="pageLoading">
             <q-spinner-hourglass class="mx-auto" color="primary" size="3em" />
           </q-inner-loading>
@@ -126,7 +134,7 @@ import { mediaApi, proposalApi } from 'src/dist/api';
 import { useUserStore } from 'src/stores/user';
 import JustLogin from 'src/components/JustLogin.vue';
 import { customAlert, emptyString } from 'src/dist/tools';
-
+import KycCard from 'src/components/KycCard.vue';
 
 export default defineComponent({
   name: 'CreateProposal',
@@ -137,7 +145,8 @@ export default defineComponent({
     }
   },
   components: {
-    JustLogin
+    JustLogin,
+    KycCard
   },
   data: function () {
     return {

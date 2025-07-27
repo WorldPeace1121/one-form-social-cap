@@ -288,13 +288,13 @@ div:where(.swal2-icon).swal2-question {
 .q-chip.bg-blue,
 .q-chip.bg-primary,
 .q-badge.bg-primary {
-  @apply bg-blue-100 text-blue-500 !important;
+  @apply bg-indigo-100 text-indigo-500 !important;
 }
 
 .q-chip.bg-blue .q-icon,
 .q-chip.bg-primary .q-icon,
 .q-badge.bg-primary .q-icon {
-  @apply text-blue-500;
+  @apply text-indigo-500;
 }
 
 .q-chip.bg-warning {

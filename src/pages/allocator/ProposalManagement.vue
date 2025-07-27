@@ -5,9 +5,9 @@
         <q-td :props="props">
           <div class="flex items-center space-x-2">
             <q-avatar size="30px">
-
+              <q-img :src="props.row.user.user_img" />
             </q-avatar>
-            <span> </span>
+            <span> {{ props.row.user.display_name }} </span>
           </div>
         </q-td>
       </template>
@@ -61,7 +61,7 @@
                 outlined v-model="auditForm.data_cap"></q-input>
               <q-input disable :rules="[(val) => !emptyString(val) || 'Please enter a value']"
                 label="Required collateral amount FIL" outlined v-model="auditForm.amount"></q-input>
-                
+
               <div class="!mt-5">
                 <q-btn class="w-full" rounded unelevated size="lg" label="Submit" color="primary" type="submit" />
               </div>

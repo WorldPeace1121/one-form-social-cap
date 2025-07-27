@@ -13,6 +13,14 @@
         <q-item-label lines="1" class="text-lg font-bold">
           {{ proposal.p_name }}
         </q-item-label>
+        <q-item-label>
+          <div class="flex items-center space-x-2">
+            <q-avatar size="20px">
+              <q-img :src="proposal.user.user_img" />
+            </q-avatar>
+            <span> {{ proposal.user.display_name }} </span>
+          </div>
+        </q-item-label>
         <q-item-label caption>
           <div class="flex items-center no-wrap space-x-1">
             <q-chip square icon="check_circle_outline" color="green" text-color="white" class="!ml-0 text-sm"

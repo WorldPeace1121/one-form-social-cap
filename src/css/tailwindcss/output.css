@@ -607,10 +607,6 @@ video {
   margin-top: -5rem;
 }
 
-.mb-1 {
-  margin-bottom: 0.25rem;
-}
-
 .mb-5 {
   margin-bottom: 1.25rem;
 }
@@ -1083,17 +1079,6 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
-.shadow-lg {
-  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
-.shadow-blue-100 {
-  --tw-shadow-color: #dbeafe;
-  --tw-shadow: var(--tw-shadow-colored);
-}
-
 .outline {
   outline-style: solid;
 }
@@ -1480,16 +1465,16 @@ div:where(.swal2-icon).swal2-question {
 .q-chip.allocator-drawer,
 .q-badge.allocator-drawer {
   --tw-bg-opacity: 1 !important;
-  background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1)) !important;
+  background-color: rgb(224 231 255 / var(--tw-bg-opacity, 1)) !important;
   --tw-text-opacity: 1 !important;
-  color: rgb(59 130 246 / var(--tw-text-opacity, 1)) !important;
+  color: rgb(99 102 241 / var(--tw-text-opacity, 1)) !important;
 }
 
 
 .q-chip.allocator-drawer .q-icon,
 .q-badge.allocator-drawer .q-icon {
   --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity, 1));
+  color: rgb(99 102 241 / var(--tw-text-opacity, 1));
 }
 
 .allocator-menu .q-item {
@@ -1519,16 +1504,16 @@ div:where(.swal2-icon).swal2-question {
 .q-chip.allocator-header,
 .q-badge.allocator-header {
   --tw-bg-opacity: 1 !important;
-  background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1)) !important;
+  background-color: rgb(224 231 255 / var(--tw-bg-opacity, 1)) !important;
   --tw-text-opacity: 1 !important;
-  color: rgb(59 130 246 / var(--tw-text-opacity, 1)) !important;
+  color: rgb(99 102 241 / var(--tw-text-opacity, 1)) !important;
 }
 
 
 .q-chip.allocator-header .q-icon,
 .q-badge.allocator-header .q-icon {
   --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity, 1));
+  color: rgb(99 102 241 / var(--tw-text-opacity, 1));
 }
 
 @media (min-width: 1204px) {
@@ -1635,16 +1620,16 @@ div:where(.swal2-icon).swal2-question {
 .q-chip.bg-primary,
 .q-badge.bg-primary {
   --tw-bg-opacity: 1 !important;
-  background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1)) !important;
+  background-color: rgb(224 231 255 / var(--tw-bg-opacity, 1)) !important;
   --tw-text-opacity: 1 !important;
-  color: rgb(59 130 246 / var(--tw-text-opacity, 1)) !important;
+  color: rgb(99 102 241 / var(--tw-text-opacity, 1)) !important;
 }
 
 .q-chip.bg-blue .q-icon,
 .q-chip.bg-primary .q-icon,
 .q-badge.bg-primary .q-icon {
   --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity, 1));
+  color: rgb(99 102 241 / var(--tw-text-opacity, 1));
 }
 
 .q-chip.bg-warning {
@@ -1711,6 +1696,14 @@ div:where(.swal2-icon).swal2-question {
     padding-right: 0px;
   }
 
+  .lg\:col-span-3 {
+    grid-column: span 3 / span 3;
+  }
+
+  .lg\:col-span-9 {
+    grid-column: span 9 / span 9;
+  }
+
   .lg\:h-\[600px\] {
     height: 600px;
   }
@@ -1729,6 +1722,10 @@ div:where(.swal2-icon).swal2-question {
 
   .lg\:w-\[65\%\] {
     width: 65%;
+  }
+
+  .lg\:grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
   }
 
   .lg\:space-x-10 > :not([hidden]) ~ :not([hidden]) {

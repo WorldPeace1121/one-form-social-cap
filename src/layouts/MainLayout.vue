@@ -6,18 +6,7 @@
           <router-link to="/">
             <q-img src="/logo.png" fit="contain" height="38px" width="110px" />
           </router-link>
-          <q-list dense v-if="!$q.screen.lt.sm" class="main-menu">
-            <q-item clickable :to="{ name: 'HomePage' }">
-              <q-item-section>
-                <q-item-label>Home</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item clickable :to="{ name: 'MyProposal' }">
-              <q-item-section>
-                <q-item-label>My Proposal</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
+          <MainMenu />
         </div>
         <UserLogin />
       </q-toolbar>
@@ -25,35 +14,7 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-    <q-footer class="px-3 py-2 shadow-lg shadow-blue-100" v-if="$q.screen.lt.sm">
-      <q-list dense class="main-menu">
-        <q-item class="flex-col items-center justify-center" clickable :to="{ name: 'ProposalPage' }">
-          <q-item-section class="!min-w-[auto] !pr-0 mb-1" avatar>
-            <q-icon name="home"></q-icon>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Proposals</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item class="flex-col items-center justify-center" clickable :to="{ name: 'MyProposal' }">
-          <q-item-section class="!min-w-[auto] !pr-0 mb-1" avatar>
-            <q-icon name="list"></q-icon>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>My Proposal</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item class="flex-col items-center justify-center" clickable :to="{ name: 'SocialPage' }">
-          <q-item-section class="!min-w-[auto] !pr-0 mb-1" avatar>
-            <q-icon name="account_tree"></q-icon>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Social</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-footer>
-    <footer v-else class="pc-footer p-4 mt-10">
+    <footer class="pc-footer p-4 mt-10">
       <div class="container space-y-3">
         <div class="flex items-center justify-center">
           <q-btn href="https://github.com/26dos" target="_blank" flat icon="fa-brands fa-github" color="white" />
@@ -84,9 +45,11 @@ import { defineComponent, ref } from 'vue';
 import { useUserStore } from 'src/stores/user';
 import { emptyString } from 'src/dist/tools';
 import { authApi, userAppToken } from 'src/dist/api';
+import MainMenu from 'src/components/MainMenu.vue';
 export default defineComponent({
   components: {
     UserLogin,
+    MainMenu,
   },
   name: 'MainLayout',
   setup: function () {
