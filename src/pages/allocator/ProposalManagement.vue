@@ -25,25 +25,13 @@
       </template>
       <template v-slot:body-cell-action="props">
         <q-td :props="props" class="space-x-2">
-          <q-btn rounded unelevated color="primary" label="View" @click="viewProposal(props.row)" />
-          <q-btn :disable="props.row.status !== 'submit' || props.row.kyc_status !== 'verified'" rounded unelevated
-            color="negative" label="Audit" @click="openAuditDialog(props.row)" />
+          <q-btn target="_blank" :to="`/proposal/detail/${props.row.p_id}`" rounded unelevated color="primary"
+            label="View" />
+          <q-btn :disable="props.row.status !== 'submit'" rounded unelevated color="negative" label="Audit"
+            @click="openAuditDialog(props.row)" />
         </q-td>
       </template>
     </q-table>
-    <q-dialog v-model="viewDialog" full-width persistent>
-      <div>
-        <q-card class="container">
-          <q-card-section class="bg-primary text-white">
-            <div class="flex items-center justify-between">
-              <div class="text-4xl font-bold">View Proposal</div>
-              <q-btn icon="close" outline round v-close-popup />
-            </div>
-          </q-card-section>
-          <proposal-view :proposal="selectedProposal" />
-        </q-card>
-      </div>
-    </q-dialog>
     <q-dialog v-model="auditDialog" persistent>
       <q-card class="main-card lg:w-[400px]">
         <q-card-section class="bg-primary text-white flex items-center justify-between">
@@ -59,9 +47,6 @@
             <q-form class="space-y-2" @submit="handleAudit">
               <q-input :rules="[(val) => !emptyString(val) || 'Please enter a value']" label="Approved DataCap Share"
                 outlined v-model="auditForm.data_cap"></q-input>
-              <q-input disable :rules="[(val) => !emptyString(val) || 'Please enter a value']"
-                label="Required collateral amount FIL" outlined v-model="auditForm.amount"></q-input>
-
               <div class="!mt-5">
                 <q-btn class="w-full" rounded unelevated size="lg" label="Submit" color="primary" type="submit" />
               </div>
@@ -82,6 +67,10 @@
         </q-inner-loading>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="plansDialog">
+      <q-card>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 <script>
@@ -89,20 +78,18 @@ import { defineComponent } from 'vue';
 import { proposalApi } from 'src/dist/api';
 import { customAlert, emptyString, toDataCapTB } from 'src/dist/tools';
 import { constStatusConfig } from 'src/dist/const-data';
-import ProposalView from 'src/components/ProposalView.vue';
+
 import { formatEther } from 'ethers';
 export default defineComponent({
   name: 'ProposalManagement',
   components: {
 
-    ProposalView,
   },
   data() {
     return {
       loading: false,
       constStatusConfig,
       auditTab: 'approve',
-      viewDialog: false,
       auditDialog: false,
       auditForm: {
         data_cap: null,
@@ -138,10 +125,9 @@ export default defineComponent({
           label: 'Approved Data Cap',
           align: 'left',
         }, {
-          field: 'kyc_status',
-          label: 'KYC Status',
+          field: 'plans',
+          label: 'Plans',
           align: 'left',
-          name: 'kyc_status',
         }, {
           label: 'Status',
           align: 'left',
@@ -189,10 +175,6 @@ export default defineComponent({
       }).finally(() => {
         this.loading = false;
       })
-    },
-    viewProposal(proposal) {
-      this.selectedProposal = proposal;
-      this.viewDialog = true;
     },
     openAuditDialog(proposal) {
       this.selectedProposal = proposal;

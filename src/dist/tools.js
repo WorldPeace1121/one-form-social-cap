@@ -204,3 +204,14 @@ export const justCapUnit = function (string) {
   }
   return false
 }
+
+export const mediaIsImage = function (url) {
+  return (
+    url.endsWith('.jpg') ||
+    url.endsWith('.jpeg') ||
+    url.endsWith('.png') ||
+    url.endsWith('.gif') ||
+    url.endsWith('.bmp') ||
+    url.endsWith('.webp')
+  )
+}

@@ -33,7 +33,7 @@
                                     <span class="text-red-500 text-base">*</span>
                                   </template>
                                 </q-input>
-                                <div v-if="field.type == 'files'" class="space-y-3">
+                                <div v-if="field.type == 'files'" class="space-y-3 relative">
                                   <h5 class="font-bold text-base flex items-center space-x-2">
                                     <span class="text-red-500 text-base">*</span>
                                     <span>{{ field.label }}</span>
@@ -44,7 +44,11 @@
                                         'bg-page-color text-meta': typeof file == 'object',
                                         'bg-green-200 text-green-500': typeof file == 'string'
                                       }">
-                                        <q-icon name="file_open" size="2em" />
+                                        <template v-if="typeof file == 'string'">
+                                          <q-img height="50px" width="50px" v-if="mediaIsImage(file)" :src="file"
+                                            fit="contain" />
+                                        </template>
+                                        <q-icon v-else name="file_open" size="3em" />
                                         <div class="text-sm font-bold">
                                           {{ file.name }}
                                         </div>
@@ -68,6 +72,9 @@
                                     </template>
                                   </div>
                                   <p class="text-xs text-gray-500">{{ field.hint }}</p>
+                                  <q-inner-loading color="primary" :showing="uploadLoading[field.key] == true">
+                                    <q-spinner-hourglass class="mx-auto" color="primary" size="3em" />
+                                  </q-inner-loading>
                                 </div>
                                 <q-select outlined dense v-model="form[field.key]" :label="field.label"
                                   :options="field.options" v-if="field.type == 'select'" :hint="field.hint"
@@ -83,8 +90,8 @@
                             <div class="flex items-center justify-end space-x-5">
                               <q-btn icon="save" rounded label="Save Draft" type="button" @click="handleSubmit('draft')"
                                 color="primary" outline />
-                              <q-btn icon-right="arrow_forward" rounded unelevated label="Next" type="submit"
-                                color="primary" />
+                              <q-btn icon-right="arrow_forward" rounded unelevated
+                                :label="index < 2 ? 'Next' : 'Submit'" type="submit" color="primary" />
                             </div>
                             <p v-if="!emptyString(error)" class="text-red-500 text-right text-xs mt-2">
                               {{ error }}
@@ -133,8 +140,9 @@ import { constProposalForm } from 'src/dist/proposal-form';
 import { mediaApi, proposalApi } from 'src/dist/api';
 import { useUserStore } from 'src/stores/user';
 import JustLogin from 'src/components/JustLogin.vue';
-import { customAlert, emptyString } from 'src/dist/tools';
+import { customAlert, emptyString, mediaIsImage } from 'src/dist/tools';
 import KycCard from 'src/components/KycCard.vue';
+import { constMediaServer } from 'src/dist/const-data';
 
 export default defineComponent({
   name: 'CreateProposal',
@@ -181,6 +189,7 @@ export default defineComponent({
   },
   methods: {
     emptyString,
+    mediaIsImage,
     goBack: function () {
       this.$router.back();
     },
@@ -203,6 +212,32 @@ export default defineComponent({
       })
     },
     nextStep: function (index) {
+      this.error = undefined
+      if (index === 1) {
+        if (this.form.volume_files.length == 0) {
+          customAlert.error('Please upload at least one file!')
+          return;
+        }
+        // file typeof no string
+        if (this.form.volume_files.some(file => typeof file !== 'string')) {
+          console.log("not string")
+          customAlert.error('Please upload only files from the media server!')
+          return;
+        }
+        // file url first part no include https://media.filplussocialcap.top
+        const notMediaServerFiles = this.form.volume_files.filter(file => {
+          return !file.startsWith(constMediaServer)
+        })
+        if (notMediaServerFiles.length > 0) {
+          console.log("not media server")
+          customAlert.error('Please upload only files from the media server!')
+          return;
+        }
+      }
+      if (index === 2) {
+        this.handleSubmit('submit')
+        return;
+      }
       this.step = index + 1
     },
     handleFileDelete: function (field, index) {
@@ -210,10 +245,15 @@ export default defineComponent({
     },
     handleFileUpload: function (field, index) {
       const file = this.form[field.key][index];
+      this.uploadLoading[field.key] = true;
       const formData = new FormData();
       formData.append('file', file);
       mediaApi.upload(formData).then((res) => {
         this.form[field.key][index] = res.data;
+      }).catch((err) => {
+        customAlert.error(err.message)
+      }).finally(() => {
+        this.uploadLoading[field.key] = false;
       })
     },
     handleFileClick: function (field) {
@@ -222,7 +262,6 @@ export default defineComponent({
     handleFileChange: function (field, event) {
       const file = event.target.files[0];
       this.form[field.key].push(file);
-      this.uploadLoading[field.key] = true;
     },
     handleSubmit: function (type) {
       this.error = undefined
@@ -246,7 +285,7 @@ export default defineComponent({
         }
         customAlert.success('Proposal submitted successfully!')
         this.$router.push({
-          name: 'PledgeRecord',
+          name: 'MyProposal',
         })
       }).catch((err) => {
         if (err.code == 61) {
