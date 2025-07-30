@@ -10,7 +10,7 @@
         logging in!
       </p>
       <div class="flex items-center justify-center space-x-5">
-        <q-btn @click="userStore.setOpenLogin(false)" label="Close" color="negative" outline rounded />
+        <q-btn v-if="showClose" @click="userStore.setOpenLogin(false)" label="Close" color="negative" outline rounded />
         <q-btn :loading="loading || userStore.isXCallback" @click="xLogin" unelevated label="Sign in with X"
           color="blue" rounded icon="fa-brands fa-x-twitter" />
       </div>
@@ -30,6 +30,12 @@ export default defineComponent({
     return {
       userStore: ref(userStore),
       loading: ref(false),
+    }
+  },
+  props: {
+    showClose: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

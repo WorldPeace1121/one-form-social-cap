@@ -9,33 +9,7 @@
           </div>
         </q-card-section>
         <q-scroll-area class="lg:h-[600px]">
-          <template v-for="(item, index) in constProposalForm" :key="index">
-            <q-list separator class="proposal-form-list">
-              <q-item-label header class="text-xl font-bold">
-                <div class="flex items-center space-x-2">
-                  <span class="h-10 w-10 bg-zinc-500 rounded-full text-white flex items-center justify-center">
-                    <q-icon :name="`fa-solid fa-${index + 1}`" size="1em" />
-                  </span>
-                  <span>{{ item.group }}</span>
-                </div>
-              </q-item-label>
-              <template v-for="field in item.fields" :key="field.key">
-                <q-item :class="`item-${field.type}`">
-                  <q-item-section side>
-                    <q-item-label>{{ field.label }}:</q-item-label>
-                  </q-item-section>
-                  <q-item-section class="content">
-                    <template v-if="proposalContent[field.key] !== undefined">
-                      <q-item-label>{{ proposalContent[field.key] }}</q-item-label>
-                    </template>
-                    <template v-else>
-                      <q-item-label>--</q-item-label>
-                    </template>
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-list>
-          </template>
+          <proposal-content :proposal-content="proposalContent" />
         </q-scroll-area>
       </q-card>
       <proposal-comments :p_id="proposal.p_id" :proposal="proposal" />
@@ -55,11 +29,13 @@ import { constStatusConfig } from 'src/dist/const-data';
 import { formatEther } from 'ethers';
 import ProposalComments from 'src/components/ProposalComments.vue';
 import StatusTimeline from 'src/components/StatusTimeline.vue';
+import ProposalContent from 'src/components/ProposalContent.vue';
 export default defineComponent({
   name: 'ProposalView',
   components: {
     ProposalComments,
-    StatusTimeline
+    StatusTimeline,
+    ProposalContent
   },
   props: {
     proposal: {

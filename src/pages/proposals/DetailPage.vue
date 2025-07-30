@@ -8,8 +8,11 @@
           <p class="text-white mt-4 lg:w-[60%] text-lg leading-loose">
             {{ proposalContent.project_history }}
           </p>
-          <div>
+          <div class="flex items-center space-x-2">
             <q-chip color="primary" :label="proposal.request_data_cap"></q-chip>
+            <q-btn v-if="proposal.user" rounded size="sm" color="blue-5" icon="fa-brands fa-x-twitter" unelevated
+              :href="`https://x.com/${proposal.user.screen_name}`" target="_blank"
+              :label="`@${proposal.user.screen_name}`" @click.stop></q-btn>
           </div>
         </div>
       </div>
@@ -18,33 +21,7 @@
           <div class="grid lg:grid-cols-12 gap-4">
             <div class="lg:col-span-9">
               <q-card class="main-card">
-                <template v-for="(item, index) in constProposalForm" :key="index">
-                  <q-list separator class="proposal-form-list">
-                    <q-item-label header class="text-xl font-bold">
-                      <div class="flex items-center space-x-2">
-                        <span class="h-10 w-10 bg-primary rounded-full text-white flex items-center justify-center">
-                          <q-icon :name="`fa-solid fa-${index + 1}`" size="1em" />
-                        </span>
-                        <span class="text-primary">{{ item.group }}</span>
-                      </div>
-                    </q-item-label>
-                    <template v-for="field in item.fields" :key="field.key">
-                      <q-item :class="`item-${field.type}`">
-                        <q-item-section side>
-                          <q-item-label>{{ field.label }}:</q-item-label>
-                        </q-item-section>
-                        <q-item-section class="content">
-                          <template v-if="proposalContent[field.key] !== undefined">
-                            <q-item-label>{{ proposalContent[field.key] }}</q-item-label>
-                          </template>
-                          <template v-else>
-                            <q-item-label>--</q-item-label>
-                          </template>
-                        </q-item-section>
-                      </q-item>
-                    </template>
-                  </q-list>
-                </template>
+                <proposal-content :proposal-content="proposalContent" />
                 <proposal-comments :p_id="proposal.p_id" :proposal="proposal" />
               </q-card>
             </div>
@@ -69,13 +46,15 @@ import { constStatusConfig } from 'src/dist/const-data';
 import { proposalApi } from 'src/dist/api';
 import StatusTimeline from 'src/components/StatusTimeline.vue';
 import ProposalComments from 'src/components/ProposalComments.vue';
+import ProposalContent from 'src/components/ProposalContent.vue';
 import KycCard from 'src/components/KycCard.vue';
 export default defineComponent({
   name: 'ProposalDetailPage',
   components: {
     StatusTimeline,
     ProposalComments,
-    KycCard
+    KycCard,
+    ProposalContent
   },
   data: function () {
     return {
@@ -91,7 +70,9 @@ export default defineComponent({
         status: 'draft',
         created_at: '',
         p_id: '',
-        request_data_cap: ''
+        request_data_cap: '',
+        user: undefined,
+        p_content: ''
       },
       loading: true,
       tab: "proposal"
@@ -120,7 +101,6 @@ export default defineComponent({
           this.proposalContent[element.key] = element.value;
         });
         this.status = constStatusConfig[newVal.status];
-        console.log(this.proposalContent);
       },
       immediate: true
     }

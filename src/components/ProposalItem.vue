@@ -21,7 +21,10 @@
             <span> {{ proposal.user.display_name }} </span>
           </div>
         </q-item-label>
-        <q-item-label caption>
+        <q-item-label lines="2" class="!mt-3 leading-loose">
+          {{ proposal.description }}
+        </q-item-label>
+        <q-item-label caption class="!mt-3">
           <div class="flex items-center no-wrap space-x-1">
             <q-chip square icon="check_circle_outline" color="green" text-color="white" class="!ml-0 text-sm"
               label="KYC verified"></q-chip>
@@ -30,9 +33,13 @@
               {{ constStatusConfig[proposal.status]?.label || proposal.status }}
             </q-chip>
           </div>
-          <ul class="text-xs text-meta flex items-center space-x-2 mt-2">
+          <ul class="text-xs text-meta flex items-center justify-between mt-2">
             <li> Created {{ dateFromNow(proposal.created_at) }}</li>
-            <li> Updated {{ dateFromNow(proposal.update_at) }}</li>
+            <li>
+              <q-btn padding="0px" size="sm" color="blue-5" dense icon="fa-brands fa-x-twitter" flat
+                :href="`https://x.com/${proposal.user.screen_name}`" target="_blank"
+                :label="`@${proposal.user.screen_name}`" @click.stop></q-btn>
+            </li>
           </ul>
         </q-item-label>
       </q-item-section>

@@ -599,6 +599,10 @@ video {
   margin-left: 0px !important;
 }
 
+.\!mt-3 {
+  margin-top: 0.75rem !important;
+}
+
 .\!mt-5 {
   margin-top: 1.25rem !important;
 }
@@ -1083,6 +1087,10 @@ video {
   outline-style: solid;
 }
 
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
 :root {
   --meta: #f2f2f2l;
   --text-meta: #939393;
@@ -1367,11 +1375,13 @@ div:where(.swal2-icon).swal2-question {
   }
 }
 
-.proposal-form-list .q-item.item-textarea {
+.proposal-form-list .q-item.item-textarea,
+.proposal-form-list .q-item.item-files {
   flex-direction: column;
 }
 
-.proposal-form-list .q-item.item-textarea > :not([hidden]) ~ :not([hidden]) {
+.proposal-form-list .q-item.item-textarea > :not([hidden]) ~ :not([hidden]),
+.proposal-form-list .q-item.item-files > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
@@ -1726,6 +1736,14 @@ div:where(.swal2-icon).swal2-question {
 
   .lg\:grid-cols-12 {
     grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .lg\:space-x-10 > :not([hidden]) ~ :not([hidden]) {

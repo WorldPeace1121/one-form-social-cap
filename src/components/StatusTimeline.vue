@@ -15,15 +15,6 @@
             <p v-html="proposal.reason_rejection"></p>
           </template>
         </q-timeline-entry>
-        <q-timeline-entry v-if="!['submit', 'draft', 'reject'].includes(proposal.status)" subtitle="Staking"
-          :icon="emptyString(proposal.staking_time) ? 'pending_actions' : 'check_circle'"
-          :color="emptyString(proposal.staking_time) ? 'primary' : 'positive'"
-          :title="emptyString(proposal.staking_time) ? 'Waiting staking' : 'Staked'">
-          <p>
-            Approve to get <span class="font-bold text-primary">{{ proposal.data_cap }}</span> DC quota,
-            pledge <span class="font-bold text-red-500">{{ formatEther(proposal.staking_amount) }} FIL</span>
-          </p>
-        </q-timeline-entry>
       </q-timeline>
     </q-card-section>
   </q-card>

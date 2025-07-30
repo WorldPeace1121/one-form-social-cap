@@ -161,9 +161,12 @@ div:where(.swal2-icon).swal2-question {
   @apply flex-col space-y-2 lg:flex-row lg:space-y-0;
 }
 
-.proposal-form-list .q-item.item-textarea {
+.proposal-form-list .q-item.item-textarea,
+.proposal-form-list .q-item.item-files {
   @apply flex-col space-y-2;
 }
+
+
 
 .proposal-form-list .q-item .content {
   @apply font-bold;
