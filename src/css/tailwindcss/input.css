@@ -335,3 +335,7 @@ div:where(.swal2-icon).swal2-question {
 .container {
   @apply px-3 lg:px-0;
 }
+
+div#plans-dialog-card {
+  max-width: 760px;
+}

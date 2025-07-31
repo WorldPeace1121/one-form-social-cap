@@ -28,6 +28,10 @@ export const proposalApi = {
   audit: (p_id, data) => api.post(`/proposals/${p_id}/proposals-audit`, data),
   //  /api/proposals/{pid}/proposals-rejection
   rejection: (p_id, data) => api.post(`/proposals/${p_id}/proposals-rejection`, data),
+  // /api/proposals/{p_id}/plans
+  plans: (p_id) => api.get(`/proposals/${p_id}/plans`),
+  // /api/proposals/{pid}/create-plan
+  createPlan: (p_id, data) => api.post(`/proposals/${p_id}/create-plan`, data),
 }
 
 export const userApi = {

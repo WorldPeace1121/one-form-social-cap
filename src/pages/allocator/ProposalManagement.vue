@@ -11,9 +11,9 @@
           </div>
         </q-td>
       </template>
-      <template v-slot:body-cell-kyc_status="props">
+      <template v-slot:body-cell-plans="props">
         <q-td :props="props">
-          <q-badge :color="props.row.kyc_status === 'verified' ? 'green' : 'red'">{{ props.row.kyc_status }}</q-badge>
+          <q-btn @click="openPlansDialog(props.row)" rounded unelevated color="primary" label="Manage Plans" />
         </q-td>
       </template>
       <template v-slot:body-cell-status="props">
@@ -67,23 +67,20 @@
         </q-inner-loading>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="plansDialog">
-      <q-card>
-      </q-card>
-    </q-dialog>
+    <PlansDialog ref="plansDialog" />
   </q-page>
 </template>
 <script>
 import { defineComponent } from 'vue';
 import { proposalApi } from 'src/dist/api';
-import { customAlert, emptyString, toDataCapTB } from 'src/dist/tools';
+import { customAlert, emptyString } from 'src/dist/tools';
 import { constStatusConfig } from 'src/dist/const-data';
-
+import PlansDialog from './components/PlansDialog.vue';
 import { formatEther } from 'ethers';
 export default defineComponent({
   name: 'ProposalManagement',
   components: {
-
+    PlansDialog
   },
   data() {
     return {
@@ -93,19 +90,7 @@ export default defineComponent({
       auditDialog: false,
       auditForm: {
         data_cap: null,
-        amount: null,
-        stake_days: undefined,
       },
-      stakeDaysOptions: [
-        {
-          label: 'Public datasets',
-          value: 20,
-        },
-        {
-          label: 'Private datasets',
-          value: 40,
-        },
-      ],
       columns: [
         {
           name: 'p_name',
@@ -126,6 +111,7 @@ export default defineComponent({
           align: 'left',
         }, {
           field: 'plans',
+          name: 'plans',
           label: 'Plans',
           align: 'left',
         }, {
@@ -151,16 +137,6 @@ export default defineComponent({
     'pagination.page': {
       handler() {
         this.getProposals()
-      },
-      immediate: true,
-    },
-    'auditForm.data_cap': {
-      handler(val) {
-        if (emptyString(val)) return;
-        const tib = parseFloat(toDataCapTB(val))
-        // 10TIB= 1FIL
-        const requiredFil = (tib / 10).toFixed(2)
-        this.auditForm.amount = requiredFil.toString()
       },
       immediate: true,
     },
@@ -198,6 +174,9 @@ export default defineComponent({
       const index = rows.findIndex((row) => row.p_id === proposal.p_id)
       rows[index] = proposal
       this.rows = rows
+    },
+    openPlansDialog(proposal) {
+      this.$refs.plansDialog.openDialog(proposal.id)
     },
     handleRejection() {
       this.auditLoading = true;

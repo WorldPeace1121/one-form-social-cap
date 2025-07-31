@@ -675,12 +675,24 @@ video {
   width: 2.5rem;
 }
 
+.w-\[200px\] {
+  width: 200px;
+}
+
 .w-\[380px\] {
   width: 380px;
 }
 
+.w-\[80px\] {
+  width: 80px;
+}
+
 .w-full {
   width: 100%;
+}
+
+.w-\[180px\] {
+  width: 180px;
 }
 
 .\!min-w-\[auto\] {
@@ -717,6 +729,10 @@ video {
 
 .justify-between {
   justify-content: space-between;
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .gap-4 {
@@ -910,11 +926,6 @@ video {
 .bg-yellow-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(234 179 8 / var(--tw-bg-opacity, 1));
-}
-
-.bg-zinc-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(113 113 122 / var(--tw-bg-opacity, 1));
 }
 
 .p-0 {
@@ -1705,7 +1716,13 @@ div:where(.swal2-icon).swal2-question {
     padding-left: 0px;
     padding-right: 0px;
   }
+}
 
+div#plans-dialog-card {
+  max-width: 760px;
+}
+
+@media (min-width: 1204px) {
   .lg\:col-span-3 {
     grid-column: span 3 / span 3;
   }
@@ -1736,10 +1753,6 @@ div:where(.swal2-icon).swal2-question {
 
   .lg\:grid-cols-12 {
     grid-template-columns: repeat(12, minmax(0, 1fr));
-  }
-
-  .lg\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .lg\:grid-cols-4 {
