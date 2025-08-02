@@ -17,7 +17,8 @@
     <footer class="pc-footer p-4 mt-10">
       <div class="container space-y-3">
         <div class="flex items-center justify-center">
-          <q-btn href="https://github.com/26dos" target="_blank" flat icon="fa-brands fa-github" color="white" />
+          <q-btn href="https://github.com/WorldPeace1121" target="_blank" flat icon="fa-brands fa-github"
+            color="white" />
         </div>
         <p class="text-center text-white text-sm">
           Copyright © 2025 Social Cap. All rights reserved.
