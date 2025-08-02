@@ -599,6 +599,10 @@ video {
   margin-left: 0px !important;
 }
 
+.\!mt-2 {
+  margin-top: 0.5rem !important;
+}
+
 .\!mt-3 {
   margin-top: 0.75rem !important;
 }
@@ -641,10 +645,6 @@ video {
 
 .mt-5 {
   margin-top: 1.25rem;
-}
-
-.\!mt-2 {
-  margin-top: 0.5rem !important;
 }
 
 .flex {
@@ -701,6 +701,10 @@ video {
 
 .grid-cols-12 {
   grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .flex-col {
@@ -1133,7 +1137,8 @@ html {
   font-weight: 700;
 }
 
-.q-dialog__backdrop {
+.q-dialog__backdrop,
+.q-drawer__backdrop {
   background-color: rgb(0 0 0 / 0.3);
   --tw-blur: blur(4px);
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
@@ -1153,9 +1158,20 @@ html {
 }
 
 .q-header,
-.pc-footer {
+.pc-footer,
+.mobile-menu-box {
   --tw-bg-opacity: 1;
   background-color: rgb(10 10 10 / var(--tw-bg-opacity, 1));
+}
+
+.mobile-menu-box .main-menu {
+  display: block;
+}
+
+.mobile-menu-box .main-menu > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 0;
+  margin-right: calc(0px * var(--tw-space-x-reverse));
+  margin-left: calc(0px * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .main-card {
@@ -1750,6 +1766,10 @@ div#plans-dialog-card {
 
   .lg\:w-\[65\%\] {
     width: 65%;
+  }
+
+  .lg\:flex-1 {
+    flex: 1 1 0%;
   }
 
   .lg\:grid-cols-12 {

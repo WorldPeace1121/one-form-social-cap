@@ -67,7 +67,6 @@
         </div>
       </template>
     </JustLogin>
-
   </q-page>
 </template>
 <script>

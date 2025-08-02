@@ -2,11 +2,12 @@
   <q-layout view="lHh Lpr lFf">
     <q-header>
       <q-toolbar class="main-toolbar py-2">
-        <div class="flex items-center space-x-5 lg:space-x-10 flex-1">
+        <q-btn v-if="$q.screen.lt.sm" flat icon="fa-solid fa-bars" color="white" @click="leftDrawerOpen = true" />
+        <div class="flex items-center space-x-5 lg:space-x-10 lg:flex-1">
           <router-link to="/">
             <q-img src="/logo.png" fit="contain" height="38px" width="110px" />
           </router-link>
-          <MainMenu />
+          <MainMenu v-if="!$q.screen.lt.sm" />
         </div>
         <UserLogin />
       </q-toolbar>
@@ -14,6 +15,12 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+    <q-drawer class="mobile-menu-box" v-model="leftDrawerOpen" side="left" behavior="mobile">
+      <div class="p-5 text-center">
+        <q-img src="/logo.png" fit="contain" height="38px" width="110px" />
+      </div>
+      <MainMenu />
+    </q-drawer>
     <footer class="pc-footer p-4 mt-10">
       <div class="container space-y-3">
         <div class="flex items-center justify-center">
@@ -63,6 +70,7 @@ export default defineComponent({
     return {
       $q: ref($q),
       userStore: ref(userStore),
+      leftDrawerOpen: ref(false)
     }
   },
   created: function () {

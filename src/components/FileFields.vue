@@ -1,5 +1,5 @@
 <template>
-  <div class="grid lg:grid-cols-4 gap-4">
+  <div class="grid grid-cols-4 gap-4">
     <div v-for="item in items" :key="item" class="rounded-lg overflow-hidden">
       <a :href="item" target="_blank">
         <q-img fit="cover" height="100px" v-if="mediaIsImage(item)" :src="item" />

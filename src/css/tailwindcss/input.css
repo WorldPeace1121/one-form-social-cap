@@ -38,7 +38,8 @@ html {
   @apply font-bold;
 }
 
-.q-dialog__backdrop {
+.q-dialog__backdrop,
+.q-drawer__backdrop {
   @apply blur-sm backdrop-blur-md bg-black/30;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
@@ -53,8 +54,13 @@ html {
 }
 
 .q-header,
-.pc-footer {
+.pc-footer,
+.mobile-menu-box {
   @apply bg-[#0a0a0a];
+}
+
+.mobile-menu-box .main-menu {
+  @apply block space-x-0;
 }
 
 .main-card {

@@ -43,9 +43,6 @@
           </ul>
         </q-item-label>
       </q-item-section>
-      <q-item-section side v-if="$q.screen.lt.sm">
-        <q-icon name="chevron_right" />
-      </q-item-section>
     </q-item>
   </q-card>
 </template>
