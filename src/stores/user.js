@@ -16,6 +16,10 @@ export const useUserStore = defineStore('user', {
       id: 0,
       display_name: '······',
       user_img: 'https://cdn.quasar.dev/img/avatar.png',
+      x_verify: {
+        kyc_status: 'unverified',
+        x_verify: {},
+      },
     },
   }),
 

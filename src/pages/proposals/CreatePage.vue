@@ -13,9 +13,9 @@
           </div>
         </div>
         <div class="container -mt-20 space-y-5">
-          <div class="grid lg:grid-cols-12 gap-4">
-            <div class="lg:col-span-9">
-              <q-card class="main-card">
+          <div class="flex gap-4">
+            <div class="flex-1">
+              <q-card class="main-card" v-if="userStore.userInfo.x_verify.kyc_status == 'verified'">
                 <q-stepper v-model="step" vertical color="primary" animated>
                   <template v-for="(group, index) in constProposalForm" :key="group.group">
                     <q-step :done="step > index" :icon="`fa-solid fa-${index + 1}`" :name="index" :title="group.group"
@@ -120,9 +120,23 @@
                   <q-spinner-hourglass class="mx-auto" color="primary" size="3em" />
                 </q-inner-loading>
               </q-card>
+              <q-card class="main-card" v-else>
+                <q-card-section class="text-center">
+                  <q-icon name="warning" size="6em" color="red" />
+                </q-card-section>
+                <q-card-section class="leading-loose text-base space-y-3">
+                  <p>Sorry, your X account does not meet our KYC verification requirements and you will be unable to
+                    create a proposal. For more information, check the <span class="font-bold text-red-500">[KYC
+                      Verification]</span>
+                    panel.</p>
+                  <p>If you have met the certification requirements, <span class="font-bold text-red-500">you can log
+                      out and log in again</span>. We will re-examine whether you meet the KYC verification requirements
+                    the next time you log in.</p>
+                </q-card-section>
+              </q-card>
             </div>
-            <div class="lg:col-span-3">
-              <KycCard />
+            <div class="lg:w-[300px]">
+              <KycCard :x_verify="userStore.userInfo.x_verify" />
             </div>
           </div>
           <q-inner-loading color="primary" :showing="pageLoading">

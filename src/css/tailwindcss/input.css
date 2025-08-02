@@ -337,5 +337,6 @@ div:where(.swal2-icon).swal2-question {
 }
 
 div#plans-dialog-card {
-  max-width: 760px;
+  max-width: 800px !important;
+  width: 800px !important;
 }

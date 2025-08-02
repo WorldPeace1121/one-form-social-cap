@@ -6,7 +6,18 @@
         <q-btn round outline icon="close" color="white" v-close-popup />
       </q-card-section>
       <q-card-section>
-        <q-table hide-bottom :pagination="{ rowsPerPage: 0 }" flat :rows="plans" :columns="columns">
+        <q-table separator="none" hide-bottom :pagination="{ rowsPerPage: 0 }" flat :rows="plans" :columns="columns">
+          <template v-slot:top-left>
+            <div class="text-base font-bold">
+              Total <span class="text-primary">{{ plans.length }}</span> plans,
+              <span class="text-primary">{{ totalDataCap }}</span> TIBs,
+              <span class="text-primary">{{plans.filter(plan => plan.status === 'success').length}}</span> plans
+              successfully implemented ({{
+                plans.filter(plan => plan.status === 'success').reduce((acc, plan) => acc + (parseFloat(plan.data_cap) ||
+                  0), 0)
+              }}TIBs)
+            </div>
+          </template>
           <template v-slot:top-right>
             <div class="flex items-center gap-2">
               <q-btn rounded outline label="Add Plan" color="primary" @click="addPlan" />
@@ -23,12 +34,18 @@
           <!-- data_cap -->
           <template v-slot:body-cell-data_cap="props">
             <q-td :props="props">
-              <q-input :disable="props.row.status !== 'pending'" dense outlined v-model="props.row.data_cap"
-                type="number">
+              <q-input class="w-[120px]" :disable="props.row.status !== 'pending'" dense outlined
+                v-model="props.row.data_cap" type="number">
                 <template v-slot:append>
                   <span class="text-sm text-primary font-bold">TIB</span>
                 </template>
               </q-input>
+            </q-td>
+          </template>
+          <template v-slot:body-cell-status="props">
+            <q-td :props="props">
+              <q-badge
+                :color="constStatusConfig[props.row.status].color">{{ constStatusConfig[props.row.status].label }}</q-badge>
             </q-td>
           </template>
         </q-table>
@@ -43,6 +60,7 @@
 import { defineComponent } from 'vue'
 import { proposalApi } from 'src/dist/api'
 import { emptyString, customAlert } from 'src/dist/tools'
+import { constStatusConfig } from 'src/dist/const-data'
 export default defineComponent({
   name: 'PlansDialog',
   data() {
@@ -76,7 +94,9 @@ export default defineComponent({
         "label": "TX Hash",
         "field": "allocate_tx",
         "align": "left"
-      }]
+      }],
+      totalDataCap: 0,
+      constStatusConfig
     }
   },
   methods: {
@@ -89,6 +109,7 @@ export default defineComponent({
       this.loading = true
       proposalApi.plans(this.p_id).then(res => {
         this.plans = res.data
+        this.totalDataCap = res.data.reduce((acc, plan) => acc + (parseFloat(plan.data_cap) || 0), 0)
       }).finally(() => {
         this.loading = false
       })

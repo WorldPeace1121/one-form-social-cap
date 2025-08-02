@@ -27,7 +27,6 @@
             </div>
             <div class="lg:col-span-3">
               <StatusTimeline :proposal="proposal" />
-              <KycCard />
             </div>
           </div>
           <q-inner-loading color="primary" :showing="loading">
@@ -47,13 +46,13 @@ import { proposalApi } from 'src/dist/api';
 import StatusTimeline from 'src/components/StatusTimeline.vue';
 import ProposalComments from 'src/components/ProposalComments.vue';
 import ProposalContent from 'src/components/ProposalContent.vue';
-import KycCard from 'src/components/KycCard.vue';
+
 export default defineComponent({
   name: 'ProposalDetailPage',
   components: {
     StatusTimeline,
     ProposalComments,
-    KycCard,
+
     ProposalContent
   },
   data: function () {

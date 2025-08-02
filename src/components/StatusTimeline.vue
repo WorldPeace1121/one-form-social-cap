@@ -15,6 +15,19 @@
             <p v-html="proposal.reason_rejection"></p>
           </template>
         </q-timeline-entry>
+        <template v-if="proposal.status === 'success' && proposal.plans != null && proposal.plans.length > 0">
+          <q-timeline-entry v-for="value in proposal.plans" :key="value.id"
+            :subtitle="constStatusConfig[value.status].capTitle" :title="`${value.data_cap} TiB`"
+            :icon="constStatusConfig[value.status].icon" :color="constStatusConfig[value.status].color">
+            <p>
+              The plan was created on <span class="font-bold text-primary">{{ formatDateTime(value.created_at)
+              }}</span>,
+              automatically implemented on <span class="font-bold text-primary">{{ formatDateTime(value.execution_time)
+              }}</span>,
+              and issuing <span class="font-bold text-primary">{{ value.data_cap }} TiB</span>.
+            </p>
+          </q-timeline-entry>
+        </template>
       </q-timeline>
     </q-card-section>
   </q-card>

@@ -643,6 +643,10 @@ video {
   margin-top: 1.25rem;
 }
 
+.\!mt-2 {
+  margin-top: 0.5rem !important;
+}
+
 .flex {
   display: flex;
 }
@@ -675,24 +679,16 @@ video {
   width: 2.5rem;
 }
 
-.w-\[200px\] {
-  width: 200px;
+.w-\[120px\] {
+  width: 120px;
 }
 
 .w-\[380px\] {
   width: 380px;
 }
 
-.w-\[80px\] {
-  width: 80px;
-}
-
 .w-full {
   width: 100%;
-}
-
-.w-\[180px\] {
-  width: 180px;
 }
 
 .\!min-w-\[auto\] {
@@ -1719,7 +1715,8 @@ div:where(.swal2-icon).swal2-question {
 }
 
 div#plans-dialog-card {
-  max-width: 760px;
+  max-width: 800px !important;
+  width: 800px !important;
 }
 
 @media (min-width: 1204px) {
@@ -1733,6 +1730,10 @@ div#plans-dialog-card {
 
   .lg\:h-\[600px\] {
     height: 600px;
+  }
+
+  .lg\:w-\[300px\] {
+    width: 300px;
   }
 
   .lg\:w-\[380px\] {
